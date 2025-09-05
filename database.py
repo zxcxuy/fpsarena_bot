@@ -132,12 +132,10 @@ class Database:
             
         try:
             with connection.cursor() as cursor:
-                # Проверяем существование пользователя
                 cursor.execute("SELECT id FROM users WHERE chat_id = %s", (chat_id,))
                 existing_user = cursor.fetchone()
                 
                 if existing_user:
-                    # Обновляем существующего пользователя
                     cursor.execute("""
                         UPDATE users 
                         SET username = COALESCE(%s, username),
@@ -146,7 +144,6 @@ class Database:
                         WHERE chat_id = %s
                     """, (username, first_name, last_name, chat_id))
                 else:
-                    # Добавляем нового пользователя
                     cursor.execute("""
                         INSERT INTO users (chat_id, username, first_name, last_name, notify)
                         VALUES (%s, %s, %s, %s, %s)
@@ -170,7 +167,6 @@ class Database:
             
         try:
             with connection.cursor() as cursor:
-                # Получаем текущий статус
                 cursor.execute("SELECT notify FROM users WHERE chat_id = %s", (chat_id,))
                 result = cursor.fetchone()
                 
@@ -181,7 +177,6 @@ class Database:
                 current_status = result[0]
                 new_status = not current_status
                 
-                # Обновляем статус
                 cursor.execute(
                     "UPDATE users SET notify = %s WHERE chat_id = %s",
                     (new_status, chat_id)
@@ -322,18 +317,3 @@ class Database:
                 print("Пул соединений закрыт")
         except Exception as e:
             print(f"Ошибка при закрытии пула соединений: {e}")
-            
-    def get_pool_stats(self):
-        """Получение статистики пула соединений"""
-        if not self.pool:
-            return "Пул не инициализирован"
-            
-        try:
-            stats = {
-                "pool_name": self.pool.pool_name,
-                "pool_size": self.pool.pool_size,
-                "available_connections": getattr(self.pool, '_cnx_queue', {}).qsize() if hasattr(self.pool, '_cnx_queue') else "N/A"
-            }
-            return stats
-        except Exception as e:
-            return f"Ошибка получения статистики пула: {e}"

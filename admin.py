@@ -13,8 +13,7 @@ def show_menu():
     print("2. Статистика базы данных")
     print("3. Очистить экран")
     print("4. Очистить таблицу(не надо)")
-    print("5. Информация по пулам")
-    print("6. Выход")
+    print("5. Выход")
     print("=" * 40)
     
 
@@ -23,7 +22,7 @@ def main():
     
     while True:
         show_menu()
-        choice = input("Выберите действие (1-6): ").strip()
+        choice = input("Выберите действие (1-5): ").strip()
         
         if choice == '1':
             clear_screen()
@@ -58,20 +57,20 @@ def main():
             else:
                 print("Нет такой команды")
             input("\nНажмите Enter для продолжения...")
+        # elif choice == '5':
+        #     clear_screen()
+        #     print("Статистика пулов")
+        #     print("=" * 40)
+        #     pool_stats = db.get_pool_stats()
+        #     if isinstance(pool_stats, dict):
+        #         print(f"Имя пула: {pool_stats.get('pool_name', 'N/A')}")
+        #         print(f"Размер пула: {pool_stats.get('pool_size', 'N/A')}")
+        #         print(f"Доступные соединения: {pool_stats.get('available_connections', 'N/A')}")
+        #     else:
+        #         print(pool_stats)
+        #     print("=" * 40)
+        #     input("\nНажмите Enter для продолжения...")
         elif choice == '5':
-            clear_screen()
-            print("Статистика пулов")
-            print("=" * 40)
-            pool_stats = db.get_pool_stats()
-            if isinstance(pool_stats, dict):
-                print(f"Имя пула: {pool_stats.get('pool_name', 'N/A')}")
-                print(f"Размер пула: {pool_stats.get('pool_size', 'N/A')}")
-                print(f"Доступные соединения: {pool_stats.get('available_connections', 'N/A')}")
-            else:
-                print(pool_stats)
-            print("=" * 40)
-            input("\nНажмите Enter для продолжения...")
-        elif choice == '6':
             print("До свидания!")
             break
         else:
@@ -86,4 +85,5 @@ if __name__ == "__main__":
         print("Для работы админ-панели необходимо установить tabulate:")
         print("pip install tabulate")
         sys.exit(1)
+
     main()
